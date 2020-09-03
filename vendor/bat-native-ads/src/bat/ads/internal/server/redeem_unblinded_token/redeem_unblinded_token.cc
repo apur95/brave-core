@@ -230,6 +230,13 @@ void RedeemUnblindedToken::OnFetchPaymentToken(
     return;
   }
   PublicKey public_key = PublicKey::decode_base64(*public_key_base64);
+  if (challenge_bypass_ristretto::exception_occurred()) {
+    challenge_bypass_ristretto::TokenException e =
+        challenge_bypass_ristretto::get_last_exception();
+    BLOG(0, "Challenge Bypass Ristretto Error: " << e.what());
+    OnRedeem(FAILED, confirmation, true);
+    return;
+  }
 
   // Get catalog issuers
   const CatalogIssuersInfo catalog_issuers =
@@ -253,6 +260,13 @@ void RedeemUnblindedToken::OnFetchPaymentToken(
   }
   BatchDLEQProof batch_dleq_proof =
       BatchDLEQProof::decode_base64(*batch_dleq_proof_base64);
+  if (challenge_bypass_ristretto::exception_occurred()) {
+    challenge_bypass_ristretto::TokenException e =
+        challenge_bypass_ristretto::get_last_exception();
+    BLOG(0, "Challenge Bypass Ristretto Error: " << e.what());
+    OnRedeem(FAILED, confirmation, true);
+    return;
+  }
 
   // Get signed tokens
   const base::Value* signed_tokens_list =
@@ -275,6 +289,14 @@ void RedeemUnblindedToken::OnFetchPaymentToken(
     const std::string signed_token_base64 = value.GetString();
     SignedToken signed_token = SignedToken::decode_base64(signed_token_base64);
 
+    if (challenge_bypass_ristretto::exception_occurred()) {
+      challenge_bypass_ristretto::TokenException e =
+          challenge_bypass_ristretto::get_last_exception();
+      BLOG(0, "Challenge Bypass Ristretto Error: " << e.what());
+      OnRedeem(FAILED, confirmation, true);
+      return;
+    }
+
     signed_tokens.push_back(signed_token);
   }
 
@@ -290,6 +312,13 @@ void RedeemUnblindedToken::OnFetchPaymentToken(
   const std::vector<UnblindedToken> batch_dleq_proof_unblinded_tokens =
       batch_dleq_proof.verify_and_unblind(tokens, blinded_tokens,
           signed_tokens, public_key);
+  if (challenge_bypass_ristretto::exception_occurred()) {
+    challenge_bypass_ristretto::TokenException e =
+        challenge_bypass_ristretto::get_last_exception();
+    BLOG(0, "Challenge Bypass Ristretto Error: " << e.what());
+    OnRedeem(FAILED, confirmation, true);
+    return;
+  }
 
   if (batch_dleq_proof_unblinded_tokens.size() != 1) {
     BLOG(1, "Failed to verify and unblind tokens");
