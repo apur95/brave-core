@@ -10,8 +10,6 @@
 
 namespace ads {
 
-struct ConfirmationType;
-
 AdNotificationInfo::AdNotificationInfo() = default;
 
 AdNotificationInfo::AdNotificationInfo(

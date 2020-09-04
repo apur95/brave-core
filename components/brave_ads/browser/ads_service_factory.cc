@@ -95,6 +95,9 @@ void AdsServiceFactory::RegisterProfilePrefs(
 
   registry->RegisterBooleanPref(prefs::kEnabled, false);
 
+  registry->RegisterBooleanPref(
+      prefs::kShouldShowPublisherAdsOnParticipatingSites, true);
+
   registry->RegisterBooleanPref(prefs::kShouldAllowAdConversionTracking, true);
 
   registry->RegisterUint64Pref(prefs::kAdsPerHour, 2);
