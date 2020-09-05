@@ -1,0 +1,12 @@
+diff --git a/services/network/ssl_config_service_mojo.cc b/services/network/ssl_config_service_mojo.cc
+index e874fa7c3fca30829c0a3ef7e25b52589db160f0..b55fc4799f077c6f262dd72d6d3f8dc605a51321 100644
+--- a/services/network/ssl_config_service_mojo.cc
++++ b/services/network/ssl_config_service_mojo.cc
+@@ -120,6 +120,7 @@ bool SSLConfigServiceMojo::CanShareConnectionWithClientCerts(
+ 
+ bool SSLConfigServiceMojo::ShouldSuppressLegacyTLSWarning(
+     const std::string& hostname) const {
++  BRAVE_SHOW_LEGACY_TLS_WARNINGS
+   // If the config is not yet loaded, we err on the side of not showing warnings
+   // for any sites.
+   if (!legacy_tls_config_)
