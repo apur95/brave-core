@@ -14,6 +14,10 @@
 #include "brave/components/brave_perf_predictor/browser/perf_predictor_page_metrics_observer.h"
 #endif
 
+#if defined(OS_ANDROID)
+#include "brave/browser/android/brave_perf_predictor_tab_helper_delegate_android_impl.h"
+#endif
+
 namespace chrome {
 
 namespace {
@@ -45,7 +49,14 @@ void BravePageLoadMetricsEmbedder::RegisterEmbedderObservers(
 #if BUILDFLAG(ENABLE_BRAVE_PERF_PREDICTOR)
   tracker->AddObserver(
       std::make_unique<
+#if defined(OS_ANDROID)
+          brave_perf_predictor::PerfPredictorPageMetricsObserver>(
+          std::make_unique<
+              chrome::android::BravePerfPredictorTabHelperDelegateAndroidImpl>
+                  ()));
+#else
           brave_perf_predictor::PerfPredictorPageMetricsObserver>());
+#endif
 #endif
 }
 
